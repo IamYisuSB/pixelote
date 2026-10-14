@@ -88,6 +88,52 @@ function PixelotePipeline(Encoders) {
     ctx.restore();
   }
 
+  /* Formas de recorte. Cada una se ajusta a la caja de recorte (w × h px) y
+   * devuelve un trazado SVG, que sirve igual para recortar en el canvas que
+   * para dibujar el contorno en el editor. */
+  const SHAPES = ['rect', 'circle', 'rounded', 'heart', 'star', 'hexagon'];
+
+  function shapePath(shape, w, h) {
+    const P = (x, y) => `${+(x * w / 100).toFixed(2)} ${+(y * h / 100).toFixed(2)}`;
+    switch (shape) {
+      case 'circle':
+        return `M0 ${h / 2}A${w / 2} ${h / 2} 0 1 1 ${w} ${h / 2}A${w / 2} ${h / 2} 0 1 1 0 ${h / 2}Z`;
+      case 'rounded': {
+        const r = Math.min(w, h) * 0.15;
+        return `M${r} 0H${w - r}A${r} ${r} 0 0 1 ${w} ${r}V${h - r}A${r} ${r} 0 0 1 ${w - r} ${h}` +
+          `H${r}A${r} ${r} 0 0 1 0 ${h - r}V${r}A${r} ${r} 0 0 1 ${r} 0Z`;
+      }
+      case 'heart':
+        return `M${P(50, 100)}C${P(50, 100)} ${P(0, 68)} ${P(0, 30)}C${P(0, 11)} ${P(13, 0)} ${P(28, 0)}` +
+          `C${P(39, 0)} ${P(46, 6)} ${P(50, 15)}C${P(54, 6)} ${P(61, 0)} ${P(72, 0)}` +
+          `C${P(87, 0)} ${P(100, 11)} ${P(100, 30)}C${P(100, 68)} ${P(50, 100)} ${P(50, 100)}Z`;
+      case 'star': {
+        // Estrella de 5 puntas encajada en la caja (su contorno ocupa 1,902 × 1,809 radios)
+        let d = '';
+        for (let i = 0; i < 10; i++) {
+          const a = -Math.PI / 2 + (i * Math.PI) / 5, r = i % 2 ? 0.5 : 1;
+          d += (i ? 'L' : 'M') + P(((Math.cos(a) * r + 0.951) / 1.902) * 100, ((Math.sin(a) * r + 1) / 1.809) * 100);
+        }
+        return d + 'Z';
+      }
+      case 'hexagon':
+        return `M${P(25, 0)}L${P(75, 0)}L${P(100, 50)}L${P(75, 100)}L${P(25, 100)}L${P(0, 50)}Z`;
+      default:
+        return null; // rectángulo: no hace falta recortar nada
+    }
+  }
+
+  /* Deja transparente lo que queda fuera de la forma. */
+  function applyShape(canvas, shape) {
+    const d = shapePath(shape, canvas.width, canvas.height);
+    if (!d) return;
+    const ctx = canvas.getContext('2d');
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-in';
+    ctx.fill(new Path2D(d));
+    ctx.restore();
+  }
+
   /* Con MozJPEG activado se codifica de las dos formas y se queda el más
    * pequeño: MozJPEG suele ganar, pero en imágenes con mucho detalle fino a
    * veces pesa más. Si no se puede descargar, solo el JPEG del navegador. */
@@ -129,8 +175,21 @@ function PixelotePipeline(Encoders) {
   }
 
   async function run(job) {
-    const canvas = render(job.source, job.g, !job.fmt.alpha, job.bg);
+    const shaped = !!shapePath(job.shape, 1, 1);
+    const canvas = render(job.source, job.g, !job.fmt.alpha && !shaped, job.bg);
     if (job.source.close) job.source.close(); // ImageBitmap: libera memoria cuanto antes
+    if (shaped) {
+      applyShape(canvas, job.shape);
+      // Sin transparencia (JPG, BMP, PDF): lo de fuera se rellena con el color de fondo
+      if (!job.fmt.alpha) {
+        const ctx = canvas.getContext('2d');
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.fillStyle = job.bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+      }
+    }
     if (job.wm) {
       applyWatermark(canvas, job.wm);
       if (job.wm.logo && job.wm.logo.close) job.wm.logo.close();
@@ -162,7 +221,7 @@ function PixelotePipeline(Encoders) {
     return { blob, page: res.page, q, missed, mozFailed: !!job.mozFailed };
   }
 
-  return { run, render, applyWatermark };
+  return { run, render, applyWatermark, applyShape, shapePath, SHAPES };
 }
 
 if (typeof window !== 'undefined') window.Pipeline = PixelotePipeline(window.Encoders);

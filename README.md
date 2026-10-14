@@ -52,7 +52,7 @@ Todo ocurre en tu navegador: tus fotos nunca salen de tu equipo.
 | 🔄 **Convertir** | A WebP, JPG, PNG, AVIF, GIF, PDF, BMP, TIFF e ICO, o en modo **Auto** (elige según sea foto, transparencia o gráfico) |
 | 🗜️ **Comprimir** | Calidad ajustable, tamaño máximo en KB, **MozJPEG** y **PNG con paleta** optimizada |
 | 📐 **Redimensionar** | Por porcentaje, ancho/alto máximo o medidas exactas, y **varios tamaños a la vez** |
-| ✂️ **Recortar y girar** | Editor de recorte con proporciones, girar 90° y voltear |
+| ✂️ **Recortar y girar** | Editor de recorte con proporciones y **formas** (redondo, corazón, estrella, hexágono…), ajuste fino con las flechas del teclado, girar 90° y voltear |
 | ⇆ **Comparar** | Deslizador antes/después con zoom al 100 % |
 | 🏷️ **Marca de agua** | Opcional, con texto o tu logo, posición, tamaño y opacidad |
 | 🛡️ **EXIF y GPS** | Conserva los metadatos o quítalos (incluida la ubicación) |

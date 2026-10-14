@@ -28,7 +28,7 @@
   }
 
   // Textos que no hay que traducir: números, símbolos, nombres de formato…
-  const SKIP = /^[\s\d·×%→←⇤⇥⟳⟲⇋⇵⇆✂✕+\-.,:;()|/—–…]*$/;
+  const SKIP = /^[\s\d·×%→←↑↓⇤⇥⟳⟲⇋⇵⇆✂✕+\-.,:;()|/—–…]*$/;
 
   function capture(root) {
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -310,6 +310,20 @@
     ['Voltear horizontal', 'Flip horizontally', 'Espelhar na horizontal', 'Horizontal spiegeln'],
     ['Voltear vertical', 'Flip vertically', 'Espelhar na vertical', 'Vertikal spiegeln'],
     ['Libre', 'Free', 'Livre', 'Frei'],
+    ['Forma', 'Shape', 'Formato', 'Form'],
+    ['Forma del recorte', 'Crop shape', 'Formato do recorte', 'Zuschnittform'],
+    ['Rectángulo', 'Rectangle', 'Retângulo', 'Rechteck'],
+    ['Redondo', 'Round', 'Redondo', 'Rund'],
+    ['Esquinas redondeadas', 'Rounded corners', 'Cantos arredondados', 'Abgerundete Ecken'],
+    ['Corazón', 'Heart', 'Coração', 'Herz'],
+    ['Estrella', 'Star', 'Estrela', 'Stern'],
+    ['Hexágono', 'Hexagon', 'Hexágono', 'Sechseck'],
+    ['Zona de recorte: muévela con las flechas', 'Crop area: move it with the arrow keys', 'Área de recorte: mova com as setas', 'Zuschnittbereich: mit den Pfeiltasten verschieben'],
+    ['mover', 'move', 'mover', 'verschieben'],
+    ['Mayús', 'Shift', 'Shift', 'Umschalt'],
+    ['más rápido', 'faster', 'mais rápido', 'schneller'],
+    ['Ctrl', 'Ctrl', 'Ctrl', 'Strg'],
+    ['cambiar tamaño', 'resize', 'redimensionar', 'Größe ändern'],
     ['Restablecer', 'Reset', 'Restaurar', 'Zurücksetzen'],
     ['Antes y después', 'Before and after', 'Antes e depois', 'Vorher und nachher'],
     ['Ajustar', 'Fit', 'Ajustar', 'Einpassen'],

@@ -240,6 +240,8 @@
         <section class="card-section">
           <h2><span class="step">4</span> Recorte</h2>
           <div class="chips" id="ratios" role="radiogroup" aria-label="Proporción de recorte"></div>
+          <p class="sub-label">Forma</p>
+          <div class="chips shapes" id="shapes" role="radiogroup" aria-label="Forma del recorte"></div>
           <p class="hint">Recorta todas al centro. Para elegir la zona exacta, girar o voltear, pulsa <b>✂</b> en cada imagen (o <b>⟳</b> para girarla).</p>
         </section>
 
@@ -364,11 +366,13 @@
           <button type="button" class="tool" data-op="fv" title="Voltear vertical" aria-label="Voltear vertical">⇵</button>
         </div>
         <div class="chips small" id="cropRatios"></div>
+        <div class="chips small shapes" id="cropShapes" role="radiogroup" aria-label="Forma del recorte"></div>
       </header>
       <div class="crop-stage">
         <div class="crop-wrap" id="cropWrap">
           <canvas id="cropCanvas"></canvas>
-          <div class="crop-box" id="cropBox">
+          <div class="crop-box" id="cropBox" tabindex="0" aria-label="Zona de recorte: muévela con las flechas">
+            <svg class="crop-shape" id="cropShape" preserveAspectRatio="none" aria-hidden="true"><path class="out" fill-rule="evenodd"/><path class="line"/></svg>
             <span class="crop-size" id="cropSize"></span>
             <i class="grid-line v1"></i><i class="grid-line v2"></i><i class="grid-line h1"></i><i class="grid-line h2"></i>
             <span class="h" data-h="nw"></span><span class="h" data-h="n"></span><span class="h" data-h="ne"></span>
@@ -379,6 +383,7 @@
       </div>
       <footer class="crop-foot">
         <button type="button" class="btn ghost danger" id="cropReset">Restablecer</button>
+        <p class="crop-keys muted"><span><kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> <span>mover</span></span><span><kbd>Mayús</kbd> <span>más rápido</span></span><span><kbd>Ctrl</kbd> <span>cambiar tamaño</span></span></p>
         <span class="spacer"></span>
         <button type="submit" class="btn ghost" value="cancel">Cancelar</button>
         <button type="button" class="btn primary" id="cropApply">Aplicar</button>

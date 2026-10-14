@@ -5,7 +5,7 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const t = (s, p) => I18N.t(s, p);
 
-  const APP_VERSION = '4.4.0';
+  const APP_VERSION = '4.5.0';
   // Dentro de la app de escritorio (Tauri) no hace falta la parte de "app instalable"
   const IS_DESKTOP = PixeloteUI.IS_DESKTOP;
 
@@ -65,19 +65,31 @@
   ];
 
   const PRESETS = [
-    { label: 'Web optimizada', emoji: '🌐', set: { format: 'webp', quality: 80, resizeMode: 'max', maxW: 1920, maxH: 1920, cropRatio: 'none', targetOn: false } },
-    { label: 'Instagram', emoji: '📸', set: { format: 'jpeg', quality: 85, resizeMode: 'max', maxW: 1080, maxH: 1080, cropRatio: '1:1', targetOn: false } },
-    { label: 'Para email', emoji: '✉️', set: { format: 'jpeg', quality: 75, resizeMode: 'max', maxW: 1600, maxH: 1600, cropRatio: 'none', targetOn: true, targetKB: 300 } },
-    { label: 'Miniaturas', emoji: '🖼️', set: { format: 'webp', quality: 72, resizeMode: 'max', maxW: 400, maxH: 400, cropRatio: 'none', targetOn: false } },
-    { label: 'Sin pérdida', emoji: '💎', set: { format: 'png', pngMode: 'lossless', resizeMode: 'none', cropRatio: 'none', targetOn: false } },
-    { label: 'Favicon', emoji: '⭐', set: { format: 'ico', resizeMode: 'none', cropRatio: '1:1', targetOn: false } },
+    { label: 'Web optimizada', emoji: '🌐', set: { format: 'webp', quality: 80, resizeMode: 'max', maxW: 1920, maxH: 1920, cropRatio: 'none', cropShape: 'rect', targetOn: false } },
+    { label: 'Instagram', emoji: '📸', set: { format: 'jpeg', quality: 85, resizeMode: 'max', maxW: 1080, maxH: 1080, cropRatio: '1:1', cropShape: 'rect', targetOn: false } },
+    { label: 'Para email', emoji: '✉️', set: { format: 'jpeg', quality: 75, resizeMode: 'max', maxW: 1600, maxH: 1600, cropRatio: 'none', cropShape: 'rect', targetOn: true, targetKB: 300 } },
+    { label: 'Miniaturas', emoji: '🖼️', set: { format: 'webp', quality: 72, resizeMode: 'max', maxW: 400, maxH: 400, cropRatio: 'none', cropShape: 'rect', targetOn: false } },
+    { label: 'Sin pérdida', emoji: '💎', set: { format: 'png', pngMode: 'lossless', resizeMode: 'none', cropRatio: 'none', cropShape: 'rect', targetOn: false } },
+    { label: 'Favicon', emoji: '⭐', set: { format: 'ico', resizeMode: 'none', cropRatio: '1:1', cropShape: 'rect', targetOn: false } },
   ];
+
+  // Formas de recorte (el dibujo y el recorte están en pipeline.js)
+  const SHAPES = [
+    { id: 'rect', label: 'Rectángulo' },
+    { id: 'circle', label: 'Redondo' },
+    { id: 'rounded', label: 'Esquinas redondeadas' },
+    { id: 'heart', label: 'Corazón' },
+    { id: 'star', label: 'Estrella' },
+    { id: 'hexagon', label: 'Hexágono' },
+  ];
+  // Estas quedan mejor cuadradas: al elegirlas sin proporción, se pasa a 1:1
+  const SQUARE_SHAPES = ['circle', 'heart', 'star', 'hexagon'];
 
   const DEFAULTS = {
     format: 'webp', quality: 82, targetOn: false, targetKB: 200,
     resizeMode: 'none', percent: 50, maxW: 1920, maxH: 1920, exactW: 1080, exactH: 1080, cover: true,
     multiW: '400, 800, 1600',
-    cropRatio: 'none', bg: '#ffffff', pattern: '{nombre}',
+    cropRatio: 'none', cropShape: 'rect', bg: '#ffffff', pattern: '{nombre}',
     pdfMerge: true, pdfPage: 'fit',
     pngMode: 'lossless', pngColors: 256, mozjpeg: true, meta: 'strip',
     autoPhoto: 'webp', autoAlpha: 'webp', autoGraphic: 'png',
@@ -133,6 +145,20 @@
     if (id === 'original') return w / h;
     const [a, b] = id.split(':').map(Number);
     return a / b;
+  }
+  function validShape(v) {
+    return SHAPES.some((x) => x.id === v) ? v : 'rect';
+  }
+  /* Forma de una imagen: la suya propia (del editor ✂) o la del panel. */
+  function shapeOf(it, s = settings) {
+    return validShape(it.shape || s.cropShape);
+  }
+  function shapeIcon(id) {
+    const d = Pipeline.shapePath(id, 16, 16) || 'M1 3h14v10H1z';
+    return `<svg viewBox="-1 -1 18 18" aria-hidden="true"><path d="${d}" fill="currentColor"/></svg>`;
+  }
+  function shapeChips() {
+    return SHAPES.map((x) => `<button type="button" role="radio" class="chip shape-chip" data-v="${x.id}" title="${esc(t(x.label))}" aria-label="${esc(t(x.label))}">${shapeIcon(x.id)}</button>`).join('');
   }
   function baseName(name) {
     return name.replace(/\.[^.]+$/, '') || 'imagen';
@@ -468,6 +494,7 @@
       quality: s.quality, targetOn: s.targetOn, targetKB: s.targetKB, bg: s.bg,
       pdfPage: s.pdfPage, pngMode: s.pngMode, pngColors: s.pngColors,
       mozjpeg: s.mozjpeg && wasmOK, nativeAvif, exif: null, wm: wmActive(s) ? wmSpec(s) : null,
+      shape: shapeOf(it, s),
     };
     if (it.exif && s.meta !== 'strip' && META_FORMATS.includes(fmt.id)) {
       job.exif = Encoders.cleanExif(it.exif, s.meta === 'keep');
@@ -901,6 +928,7 @@
     const tags = [
       it.ov ? `<span class="tag">⚙ ${esc(t('propios'))}</span>` : '',
       it.crop ? `<span class="tag">✂ ${esc(t('recorte'))}</span>` : '',
+      it.shape ? `<span class="tag">${shapeIcon(it.shape)} ${esc(t(SHAPES.find((x) => x.id === it.shape).label))}</span>` : '',
       !isIdentity(it.m) ? `<span class="tag">⟳ ${esc(t('girada'))}</span>` : '',
       it.gps ? `<span class="tag" title="${esc(gpsTitle)}">📍 GPS</span>` : '',
     ].join('');
@@ -1248,6 +1276,7 @@
         <small>${esc(t(f.id === 'auto' ? 'según imagen' : f.id === 'original' ? 'mismo formato' : f.lossy ? 'con pérdida' : 'sin pérdida'))}</small>
       </button>`).join('');
     $('#ratios').innerHTML = RATIOS.map((r) => `<button type="button" role="radio" class="chip" data-v="${r.id}">${esc(t(r.label))}</button>`).join('');
+    $('#shapes').innerHTML = shapeChips();
     bindPresets();
   }
 
@@ -1263,6 +1292,13 @@
       const b = e.target.closest('.chip');
       if (!b) return;
       settings.cropRatio = b.dataset.v;
+      changed();
+    });
+    $('#shapes').addEventListener('click', (e) => {
+      const b = e.target.closest('.chip');
+      if (!b) return;
+      settings.cropShape = b.dataset.v;
+      if (SQUARE_SHAPES.includes(b.dataset.v) && settings.cropRatio === 'none') settings.cropRatio = '1:1';
       changed();
     });
 
@@ -1320,6 +1356,7 @@
     const s = settings;
     $$('#formats .fmt').forEach((b) => b.setAttribute('aria-checked', b.dataset.v === s.format));
     $$('#ratios .chip').forEach((b) => b.setAttribute('aria-checked', b.dataset.v === s.cropRatio));
+    $$('#shapes .chip').forEach((b) => b.setAttribute('aria-checked', b.dataset.v === validShape(s.cropShape)));
     markSegmented('resizeMode', s.resizeMode);
     markSegmented('pdfPage', s.pdfPage);
     markSegmented('pngMode', s.pngMode);
@@ -1466,12 +1503,13 @@
   /* ---------- Editor: recortar, girar y voltear ---------- */
 
   // El editor trabaja sobre una copia de la orientación (m) hasta pulsar Aplicar
-  const crop = { it: null, ratio: 'free', rect: null, W: 0, H: 0, m: IDENTITY, ow: 0, oh: 0 };
+  const crop = { it: null, ratio: 'free', shape: 'rect', rect: null, W: 0, H: 0, m: IDENTITY, ow: 0, oh: 0 };
   const MIN = 24;
 
   function renderCropRatios() {
     const opts = [{ id: 'free', label: 'Libre' }, { id: 'original', label: 'Original' }].concat(RATIOS.slice(1));
     $('#cropRatios').innerHTML = opts.map((r) => `<button type="button" class="chip" data-v="${r.id}">${esc(t(r.label))}</button>`).join('');
+    $('#cropShapes').innerHTML = shapeChips();
     markCropRatio();
   }
 
@@ -1482,9 +1520,24 @@
       if (!b) return;
       setCropRatio(b.dataset.v, true);
     });
+    $('#cropShapes').addEventListener('click', (e) => {
+      const b = e.target.closest('.chip');
+      if (b) setCropShape(b.dataset.v);
+    });
     $('#cropTools').addEventListener('click', (e) => {
       const b = e.target.closest('[data-op]');
       if (b) rotateInEditor(b.dataset.op);
+    });
+
+    // Flechas: mueven el recorte 1 px (10 con Mayús); con Ctrl cambian su tamaño
+    $('#cropDialog').addEventListener('keydown', (e) => {
+      const dir = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+      if (!dir || !crop.rect || e.altKey || e.target.closest('input, textarea, select')) return;
+      e.preventDefault();
+      const step = e.shiftKey ? 10 : 1;
+      const [dx, dy] = [dir[0] * step, dir[1] * step];
+      const next = e.ctrlKey || e.metaKey ? resizeRect(crop.rect, 'se', dx, dy) : moveRect(crop.rect, dx, dy);
+      if (next) { crop.rect = next; drawCropBox(); }
     });
 
     const box = $('#cropBox');
@@ -1509,10 +1562,13 @@
       const n = normalizedCrop();
       const full = n.w * W >= W - 1 && n.h * H >= H - 1;
       $('#cropDialog').close();
+      // La forma solo se guarda en la imagen si es distinta de la del panel
+      it.shape = crop.shape === validShape(settings.cropShape) ? null : crop.shape;
       setOrientation(it, crop.m, full ? null : n);
     });
     $('#cropReset').addEventListener('click', () => {
       crop.m = IDENTITY;
+      crop.shape = validShape(settings.cropShape);
       drawEditorImage();
       requestAnimationFrame(() => { measureCrop(); setCropRatio('free', true); });
     });
@@ -1568,8 +1624,10 @@
     if (!usable(it)) return;
     crop.it = it;
     crop.m = it.m;
+    crop.shape = shapeOf(it);
     drawEditorImage();
     $('#cropDialog').showModal();
+    $('#cropBox').focus({ preventScroll: true });
     requestAnimationFrame(() => {
       measureCrop();
       if (it.crop) {
@@ -1584,6 +1642,18 @@
 
   function markCropRatio() {
     $$('#cropRatios .chip').forEach((b) => b.setAttribute('aria-checked', b.dataset.v === crop.ratio));
+    $$('#cropShapes .chip').forEach((b) => b.setAttribute('aria-checked', b.dataset.v === crop.shape));
+  }
+
+  function setCropShape(id) {
+    crop.shape = validShape(id);
+    // Un círculo o un corazón libres salen deformados: se pasa a 1:1 sin mover el centro
+    if (SQUARE_SHAPES.includes(crop.shape) && crop.ratio === 'free') {
+      crop.ratio = '1:1';
+      crop.rect = centerCrop(crop.rect, 1);
+    }
+    markCropRatio();
+    drawCropBox();
   }
 
   function currentRatio() {
@@ -1644,6 +1714,13 @@
     box.style.top = rect.y + 'px';
     box.style.width = rect.w + 'px';
     box.style.height = rect.h + 'px';
+    // Contorno de la forma: oscurece lo que queda fuera, dentro de la caja
+    const d = Pipeline.shapePath(crop.shape, rect.w, rect.h);
+    const svg = $('#cropShape');
+    box.classList.toggle('shaped', !!d);
+    svg.setAttribute('viewBox', `0 0 ${rect.w} ${rect.h}`);
+    svg.querySelector('.out').setAttribute('d', d ? `M0 0H${rect.w}V${rect.h}H0Z${d}` : '');
+    svg.querySelector('.line').setAttribute('d', d || '');
     $('#cropSize').textContent = `${Math.round(rect.w / W * crop.ow)} × ${Math.round(rect.h / H * crop.oh)}`;
   }
 
@@ -1722,6 +1799,7 @@
     const g = geometry(it, s);
     // "Antes": la misma zona y tamaño, sin comprimir
     const before = Pipeline.render(orientedSource(it), g, false, s.bg);
+    Pipeline.applyShape(before, shapeOf(it, s));
     const cv = $('#cmpBefore');
     cv.width = g.dw; cv.height = g.dh;
     cv.getContext('2d').drawImage(before, 0, 0);

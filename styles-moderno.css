@@ -750,3 +750,23 @@ a.btn, a.btn:visited { color: var(--text); }
 #installText p { margin: 0 0 8px; }
 #installText ol { margin: 0; padding-left: 20px; }
 @media (max-width: 600px) { .get-btn > span { display: none; } .get-list { right: -60px; } }
+
+/* ---------- Formas de recorte y teclado ---------- */
+.sub-label { margin: 12px 0 6px; font-size: 12.5px; font-weight: 650; color: var(--muted); }
+.chips .shape-chip { display: inline-grid; place-items: center; padding: 6px 10px; }
+.shape-chip svg { width: 18px; height: 18px; display: block; }
+.chips.small .shape-chip { padding: 5px 8px; }
+.chips.small .shape-chip svg { width: 15px; height: 15px; }
+.tag svg { width: 11px; height: 11px; vertical-align: -1px; }
+.crop-shape { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.crop-shape .out { fill: rgba(6, 5, 14, .58); }
+.crop-shape .line { fill: none; stroke: #fff; stroke-width: 2; vector-effect: non-scaling-stroke; }
+.crop-box.shaped { border-style: dashed; border-color: rgba(255, 255, 255, .55); }
+.crop-box:focus { outline: none; }
+.crop-box:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.crop-keys { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0; font-size: 12px; }
+.crop-keys kbd {
+  display: inline-block; min-width: 20px; padding: 1px 5px; margin-right: 2px; text-align: center;
+  font-family: inherit; font-size: 11px; font-weight: 600; line-height: 1.5; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 5px; background: var(--surface-2, transparent);
+}
+@media (max-width: 700px) { .crop-keys { display: none; } }
