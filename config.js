@@ -8,10 +8,16 @@
  *   reportGithub:   'usuario/repositorio' → abre un issue de GitHub ya rellenado.
  *   reportEmail:    'tu@correo.com' → abre el programa de correo con el informe.
  *
- * Si todas están vacías, el informe solo se puede copiar o descargar. */
+ * Si todas están vacías, el informe solo se puede copiar o descargar.
+ *
+ * Actualizaciones (solo la app de Windows):
+ *   updateRepo:     'usuario/repositorio' de GitHub donde se publican las
+ *                   Releases. Al abrirse, la app mira cuál es la última y avisa
+ *                   si hay una más nueva. Vacío = no comprueba nada. */
 window.PIXELOTE_CONFIG = Object.assign({
   web3formsKey: '9cd34f3c-9822-44eb-83f2-01a76b6ad680',
   reportEndpoint: '',
   reportGithub: '',
   reportEmail: '',
+  updateRepo: 'IamYisuSB/pixelote',
 }, window.PIXELOTE_CONFIG);

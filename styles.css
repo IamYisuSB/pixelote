@@ -717,3 +717,5 @@ a.btn, a.btn:visited { color: var(--text); }
   font-family: inherit; font-size: 11px; font-weight: 600; line-height: 1.5; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 5px;
 }
 @media (max-width: 700px) { .crop-keys { display: none; } }
+.hint.warn { color: var(--warn); }
+.crop-shape-note { flex-basis: 100%; margin: 0; }

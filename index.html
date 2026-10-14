@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <!-- Seguridad: la página solo carga código propio y del CDN de los códecs, y solo envía datos a Web3Forms.
        Si cambias el script de abajo, recalcula su huella sha256. Si usas reportEndpoint, añade su dominio a connect-src. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-m9dMXTQTlk/JuP85zKJ0hAnbAgpksdyMDPvv/IGMOvw=' https://cdn.jsdelivr.net blob: 'wasm-unsafe-eval'; worker-src 'self' blob:; connect-src 'self' https://cdn.jsdelivr.net https://api.web3forms.com blob: data:; img-src 'self' data: blob:; style-src 'self'; font-src 'self'; manifest-src 'self'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-m9dMXTQTlk/JuP85zKJ0hAnbAgpksdyMDPvv/IGMOvw=' https://cdn.jsdelivr.net blob: 'wasm-unsafe-eval'; worker-src 'self' blob:; connect-src 'self' https://cdn.jsdelivr.net https://api.web3forms.com https://api.github.com blob: data:; img-src 'self' data: blob:; style-src 'self'; font-src 'self'; manifest-src 'self'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pixelote · Conversor de imágenes</title>
@@ -242,6 +242,7 @@
           <div class="chips" id="ratios" role="radiogroup" aria-label="Proporción de recorte"></div>
           <p class="sub-label">Forma</p>
           <div class="chips shapes" id="shapes" role="radiogroup" aria-label="Forma del recorte"></div>
+          <p class="hint warn" id="shapeNote" hidden></p>
           <p class="hint">Recorta todas al centro. Para elegir la zona exacta, girar o voltear, pulsa <b>✂</b> en cada imagen (o <b>⟳</b> para girarla).</p>
         </section>
 
@@ -367,6 +368,7 @@
         </div>
         <div class="chips small" id="cropRatios"></div>
         <div class="chips small shapes" id="cropShapes" role="radiogroup" aria-label="Forma del recorte"></div>
+        <p class="hint warn crop-shape-note" id="cropShapeNote" hidden></p>
       </header>
       <div class="crop-stage">
         <div class="crop-wrap" id="cropWrap">
@@ -526,6 +528,20 @@
   </dialog>
 
   <!-- Aviso cuando la app detecta un error -->
+  <!-- Aviso de versión nueva -->
+  <div class="error-prompt update-prompt" id="updatePrompt" role="status" aria-labelledby="upTitle" hidden>
+    <div class="ep-head">
+      <span class="ep-icon" aria-hidden="true">✨</span>
+      <b id="upTitle"></b>
+      <button type="button" class="ep-close" id="upClose" aria-label="Cerrar aviso">✕</button>
+    </div>
+    <p class="ep-small" id="upText"></p>
+    <div class="ep-actions">
+      <button type="button" class="btn ghost small" id="upLater">Ahora no</button>
+      <button type="button" class="btn primary small" id="upGo"></button>
+    </div>
+  </div>
+
   <div class="error-prompt" id="errorPrompt" role="alertdialog" aria-labelledby="epTitle" hidden>
     <div class="ep-head">
       <span class="ep-icon" aria-hidden="true">⚠️</span>

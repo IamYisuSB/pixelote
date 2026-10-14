@@ -1,6 +1,6 @@
 [package]
 name = "pixelote"
-version = "4.5.0"
+version = "4.6.0"
 description = "Pixelote: conversor de imágenes por lotes"
 edition = "2021"
 
@@ -13,6 +13,8 @@ tauri-build = { version = "2", features = [] }
 
 [dependencies]
 tauri = { version = "2", features = [] }
+# Abre en el navegador del sistema el enlace del aviso de versión nueva
+tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 

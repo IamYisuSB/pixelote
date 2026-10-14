@@ -5,7 +5,7 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const t = (s, p) => I18N.t(s, p);
 
-  const APP_VERSION = '4.5.0';
+  const APP_VERSION = '4.6.0';
   // Dentro de la app de escritorio (Tauri) no hace falta la parte de "app instalable"
   const IS_DESKTOP = PixeloteUI.IS_DESKTOP;
 
@@ -324,12 +324,31 @@
     return it.oriented;
   }
 
+  /* Lo que cambia la miniatura: orientación, zona recortada y forma. */
+  function thumbKey(it) {
+    const s = eff(it), g = geometry(it, s);
+    return [it.m.join(), g.sx, g.sy, g.sw, g.sh, shapeOf(it, s)].join('|');
+  }
+
+  /* Miniatura de 480 px como mucho, con el recorte y la forma ya aplicados, para
+   * ver en la tarjeta lo que va a salir. (Mostrar la foto original obliga además
+   * a decodificar y escalar imágenes enormes, y el scroll va a tirones.) */
   async function refreshThumb(it) {
     const token = (it.thumbToken = (it.thumbToken || 0) + 1);
+    it.thumbKey = thumbKey(it);
+    const s = eff(it), g = geometry(it, s), shape = shapeOf(it, s);
+    const region = g.sx || g.sy || g.sw !== it.w || g.sh !== it.h;
+    const k = Math.min(1, 480 / Math.max(g.sw, g.sh));
     let url = null;
-    if (!isIdentity(it.m)) {
-      const k = Math.min(1, 480 / Math.max(it.baseW, it.baseH));
-      url = URL.createObjectURL(await canvasToBlob(drawOriented(it.img, it.m, it.baseW, it.baseH, k), 'image/png'));
+    if (!isIdentity(it.m) || k < 1 || region || shape !== 'rect') {
+      let c = drawOriented(it.img, it.m, it.baseW, it.baseH, k);
+      if (region || shape !== 'rect') {
+        const out = makeCanvas(Math.max(1, Math.round(g.sw * k)), Math.max(1, Math.round(g.sh * k)));
+        out.getContext('2d').drawImage(c, -g.sx * k, -g.sy * k);
+        Pipeline.applyShape(out, shape);
+        c = out;
+      }
+      url = URL.createObjectURL(await canvasToBlob(c, 'image/webp', 0.85));
     }
     if (token !== it.thumbToken) { if (url) URL.revokeObjectURL(url); return; }
     if (it.thumbUrl) URL.revokeObjectURL(it.thumbUrl);
@@ -746,6 +765,7 @@
         it.cls = classify(it);
         await readExif(it);
         it.status = 'ready';
+        await refreshThumb(it);
       } catch (e) {
         it.status = 'invalid';
         it.errorMsg = e.message;
@@ -974,6 +994,7 @@
   }
 
   function refreshChrome() {
+    updateShapeNote();
     const valid = items.filter(usable);
     const has = items.length > 0;
     $('#dropzone').classList.toggle('compact', has);
@@ -1383,6 +1404,7 @@
     const missing = FORMATS.filter((x) => !supported[x.id]).map((x) => x.label);
     $('#formatNote').hidden = !missing.length;
     $('#formatNote').textContent = missing.length ? t('Este navegador no puede generar: {f}. Prueba con Chrome, Edge o Firefox actualizados.', { f: missing.join(', ') }) : '';
+    updateShapeNote();
     $('#qualityBlock').hidden = !lossy;
     $('#pngOptions').hidden = !(f.id === 'png' || flexible);
     $('#pngColorsRow').hidden = s.pngMode !== 'palette';
@@ -1441,6 +1463,7 @@
     clearTimeout(cardTimer);
     cardTimer = setTimeout(() => {
       updateAllCards();
+      items.forEach((it) => { if (usable(it) && it.thumbKey !== thumbKey(it)) refreshThumb(it); });
       refreshChrome();
     }, fromInput ? 120 : 0);
   }
@@ -1565,6 +1588,7 @@
       // La forma solo se guarda en la imagen si es distinta de la del panel
       it.shape = crop.shape === validShape(settings.cropShape) ? null : crop.shape;
       setOrientation(it, crop.m, full ? null : n);
+      updateShapeNote();
     });
     $('#cropReset').addEventListener('click', () => {
       crop.m = IDENTITY;
@@ -1625,6 +1649,7 @@
     crop.it = it;
     crop.m = it.m;
     crop.shape = shapeOf(it);
+    updateCropShapeNote();
     drawEditorImage();
     $('#cropDialog').showModal();
     $('#cropBox').focus({ preventScroll: true });
@@ -1645,6 +1670,26 @@
     $$('#cropShapes .chip').forEach((b) => b.setAttribute('aria-checked', b.dataset.v === crop.shape));
   }
 
+  /* Formatos sin transparencia (JPG, BMP, PDF): lo de fuera de la forma se rellena. */
+  function opaqueShapeFormats(list) {
+    return Array.from(new Set(list.filter((x) => x.shape !== 'rect' && !x.fmt.alpha).map((x) => x.fmt.label)));
+  }
+  function shapeNoteText(labels) {
+    return labels.length ? t('{f} no admite transparencia: lo que quede fuera de la forma saldrá con el color de fondo. Para que quede transparente, elige PNG, WebP o AVIF.', { f: labels.join(', ') }) : '';
+  }
+  function updateShapeNote() {
+    const list = items.filter(usable).map((it) => ({ shape: shapeOf(it), fmt: outFormat(it, eff(it)) }));
+    if (!list.length && settings.cropShape !== 'rect' && FMT[settings.format].ext) list.push({ shape: validShape(settings.cropShape), fmt: FMT[settings.format] });
+    const text = shapeNoteText(opaqueShapeFormats(list));
+    $('#shapeNote').hidden = !text;
+    $('#shapeNote').textContent = text;
+  }
+  function updateCropShapeNote() {
+    const text = crop.it ? shapeNoteText(opaqueShapeFormats([{ shape: crop.shape, fmt: outFormat(crop.it, eff(crop.it)) }])) : '';
+    $('#cropShapeNote').hidden = !text;
+    $('#cropShapeNote').textContent = text;
+  }
+
   function setCropShape(id) {
     crop.shape = validShape(id);
     // Un círculo o un corazón libres salen deformados: se pasa a 1:1 sin mover el centro
@@ -1653,6 +1698,7 @@
       crop.rect = centerCrop(crop.rect, 1);
     }
     markCropRatio();
+    updateCropShapeNote();
     drawCropBox();
   }
 
@@ -2363,7 +2409,10 @@
     link.rel = 'manifest';
     link.href = 'manifest.webmanifest';
     document.head.appendChild(link);
-    navigator.serviceWorker.register('sw.js').then(() => { $('#offlineRow').hidden = false; }).catch((e) => console.warn('Sin modo sin conexión:', e));
+    navigator.serviceWorker.register('sw.js').then((reg) => {
+      $('#offlineRow').hidden = false;
+      watchWebUpdates(reg);
+    }).catch((e) => console.warn('Sin modo sin conexión:', e));
 
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
@@ -2391,6 +2440,84 @@
       btn.textContent = t('Descargar códecs (TIFF, AVIF, MozJPEG)');
       toast(ok === urls.length ? t('Listo: ya puedes usar TIFF, AVIF y MozJPEG sin conexión') : t('No se pudieron descargar todos los códecs. ¿Hay conexión?'));
     });
+  }
+
+  /* ---------- Avisos de versión nueva ---------- */
+
+  const UPDATE_SEEN_KEY = 'pixelote.update.dismissed';
+
+  /* `upd`: { title, text, action, go, version? } */
+  function showUpdate(upd) {
+    $('#upTitle').textContent = upd.title;
+    $('#upText').textContent = upd.text;
+    $('#upGo').textContent = upd.action;
+    $('#upGo').onclick = upd.go;
+    const close = () => {
+      $('#updatePrompt').hidden = true;
+      if (upd.version) { try { localStorage.setItem(UPDATE_SEEN_KEY, upd.version); } catch (_) { /* nada */ } }
+    };
+    $('#upLater').onclick = close;
+    $('#upClose').onclick = close;
+    $('#updatePrompt').hidden = false;
+  }
+
+  /* Web e instalada (PWA): el service worker descarga la versión nueva en segundo
+   * plano y se activa enseguida, pero la página abierta sigue con la antigua
+   * hasta recargar. Se avisa en ese momento. */
+  function watchWebUpdates(reg) {
+    const hadVersion = !!navigator.serviceWorker.controller; // la primera visita no es una actualización
+    reg.addEventListener('updatefound', () => {
+      const w = reg.installing;
+      if (!w || !hadVersion) return;
+      w.addEventListener('statechange', () => {
+        if (w.state !== 'activated') return;
+        showUpdate({
+          title: t('Hay una versión nueva de Pixelote'),
+          text: items.length ? t('Recarga para usarla. Las imágenes que tienes abiertas se quitarán, así que descarga antes las que necesites.') : t('Recarga la página para usarla.'),
+          action: t('Actualizar'),
+          go: () => location.reload(),
+        });
+      });
+    });
+    // Comprueba si hay versión nueva al volver a la pestaña y cada hora
+    const check = () => reg.update().catch(() => {});
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });
+    setInterval(check, 60 * 60 * 1000);
+  }
+
+  /* "4.10.0" > "4.9.2" */
+  function isNewer(a, b) {
+    const pa = a.split('.').map(Number), pb = b.split('.').map(Number);
+    for (let i = 0; i < 3; i++) if ((pa[i] || 0) !== (pb[i] || 0)) return (pa[i] || 0) > (pb[i] || 0);
+    return false;
+  }
+
+  /* App de Windows: al abrirse mira la última Release en GitHub. */
+  async function checkDesktopUpdate() {
+    const repo = String(CONFIG.updateRepo || '');
+    if (!IS_DESKTOP || !/^[\w.-]+\/[\w.-]+$/.test(repo)) return;
+    try {
+      const r = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, { headers: { Accept: 'application/vnd.github+json' } });
+      if (!r.ok) return;
+      const rel = await r.json();
+      const v = String(rel.tag_name || '').replace(/^v/, '');
+      if (!/^\d+\.\d+\.\d+$/.test(v) || !isNewer(v, APP_VERSION)) return;
+      let seen = '';
+      try { seen = localStorage.getItem(UPDATE_SEEN_KEY) || ''; } catch (_) { /* nada */ }
+      if (seen === v) return; // ya dijo "Ahora no" a esta versión
+      const page = /^https:\/\/github\.com\//.test(rel.html_url) ? rel.html_url : `https://github.com/${repo}/releases/latest`;
+      showUpdate({
+        version: v,
+        title: t('Pixelote {v} ya está disponible', { v }),
+        text: t('Tienes la {v}. Descarga el instalador nuevo y ejecútalo: se instala encima, sin perder nada.', { v: APP_VERSION }),
+        action: t('Descargar'),
+        go: () => {
+          $('#updatePrompt').hidden = true;
+          // Se abre en el navegador del sistema (plugin "opener" de Tauri)
+          window.__TAURI_INTERNALS__.invoke('plugin:opener|open_url', { url: page }).catch(() => {});
+        },
+      });
+    } catch (_) { /* sin conexión: ya avisará otro día */ }
   }
 
   /* ---------- Entrada de archivos ---------- */
@@ -2475,6 +2602,7 @@
     refreshChrome();
     checkSharedPreset();
     setupPWA();
+    checkDesktopUpdate();
     initPool(); // arranca los Workers mientras se eligen las imágenes
   })();
 })();

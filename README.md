@@ -140,6 +140,7 @@ La app de Windows está en [`desktop/`](desktop/README.md) (Tauri, ~3,5 MB).
 
 - **Para publicar una versión nueva**, ejecuta `npm run publicar` en `desktop/` (o `npm run publicar:github` para crear también la Release). Compila, copia los `.exe` a `descargas/` y actualiza `descargas/version.js`, que la página de descarga lee para mostrar la versión, el tamaño y las huellas SHA-256.
 - La versión se cambia en `desktop/src-tauri/tauri.conf.json` (y en `APP_VERSION` de `app.js` para que coincida).
+- **Avisos de versión nueva:** al abrirse, la app de Windows consulta la última Release de GitHub (`updateRepo` en `config.js`) y, si es más nueva, ofrece descargarla. La web y la app instalada avisan con un botón *Actualizar* cuando el navegador ha descargado una versión nueva; para que lo detecte, cambia `VERSION` en `sw.js` en cada publicación.
 
 </details>
 

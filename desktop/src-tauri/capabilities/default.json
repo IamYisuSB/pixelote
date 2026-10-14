@@ -1,7 +1,13 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Permisos de la ventana principal: ninguno extra. La app solo usa funciones web.",
+  "description": "Permisos de la ventana principal: solo abrir en el navegador los enlaces de descarga de versiones nuevas (GitHub y pixelote.de).",
   "windows": ["main"],
-  "permissions": ["core:default"]
+  "permissions": [
+    "core:default",
+    {
+      "identifier": "opener:allow-open-url",
+      "allow": [{ "url": "https://github.com/*" }, { "url": "https://pixelote.de/*" }]
+    }
+  ]
 }
