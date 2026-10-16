@@ -2,13 +2,16 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
+  <!-- La app vive en /app/: todas las rutas relativas parten de la raíz del sitio -->
+  <base href="../">
   <!-- Seguridad: la página solo carga código propio y del CDN de los códecs, y solo envía datos a Web3Forms.
        Si cambias el script de abajo, recalcula su huella sha256. Si usas reportEndpoint, añade su dominio a connect-src. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-m9dMXTQTlk/JuP85zKJ0hAnbAgpksdyMDPvv/IGMOvw=' https://cdn.jsdelivr.net blob: 'wasm-unsafe-eval'; worker-src 'self' blob:; connect-src 'self' https://cdn.jsdelivr.net https://api.web3forms.com https://api.github.com blob: data:; img-src 'self' data: blob:; style-src 'self'; font-src 'self'; manifest-src 'self'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-m9dMXTQTlk/JuP85zKJ0hAnbAgpksdyMDPvv/IGMOvw=' https://cdn.jsdelivr.net blob: 'wasm-unsafe-eval'; worker-src 'self' blob:; connect-src 'self' https://cdn.jsdelivr.net https://api.web3forms.com https://api.github.com blob: data:; img-src 'self' data: blob:; style-src 'self'; font-src 'self'; manifest-src 'self'; media-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pixelote · Conversor de imágenes</title>
+  <title>Pixelote · App para convertir imágenes por lotes</title>
   <meta name="description" content="Convierte, comprime, redimensiona y recorta imágenes por lotes. Todo en tu navegador, sin subir nada.">
+  <link rel="canonical" href="https://pixelote.de/app/">
   <meta name="theme-color" content="#5b5bd6">
   <link rel="icon" href="icons/logo.svg" type="image/svg+xml">
   <link rel="alternate icon" href="icons/icon-192.png" type="image/png">
@@ -33,7 +36,7 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
+    <a class="brand brand-link" href="./" title="Inicio">
       <span class="logo" aria-hidden="true">
         <svg viewBox="0 0 48 48" aria-hidden="true"><defs> <linearGradient id="pxg-head" x1="0" y1="0" x2="1" y2="1"> <stop offset="0" stop-color="#6d5dfc"/> <stop offset=".55" stop-color="#a855f7"/> <stop offset="1" stop-color="#ec4899"/> </linearGradient> </defs> <rect width="48" height="48" rx="14" fill="url(#pxg-head)"/> <g fill="#fff"> <rect x="12.5" y="9.5" width="5" height="5" rx="1.3"/> <rect x="18.5" y="9.5" width="5" height="5" rx="1.3"/> <rect x="24.5" y="9.5" width="5" height="5" rx="1.3"/> <rect x="12.5" y="15.5" width="5" height="5" rx="1.3"/> <rect x="30.5" y="15.5" width="5" height="5" rx="1.3"/> <rect x="12.5" y="21.5" width="5" height="5" rx="1.3"/> <rect x="18.5" y="21.5" width="5" height="5" rx="1.3"/> <rect x="24.5" y="21.5" width="5" height="5" rx="1.3"/> <rect x="12.5" y="27.5" width="5" height="5" rx="1.3"/> <rect x="12.5" y="33.5" width="5" height="5" rx="1.3"/> <rect x="19.6" y="34.6" width="3.8" height="3.8" rx="1" opacity=".85"/> <rect x="25.2" y="35.7" width="2.7" height="2.7" rx=".7" opacity=".65"/> <rect x="29.7" y="36.7" width="1.7" height="1.7" rx=".45" opacity=".45"/> </g></svg>
       </span>
@@ -41,7 +44,7 @@
         <h1>Pixelote</h1>
         <p>Convierte, comprime, redimensiona y recorta imágenes por lotes</p>
       </div>
-    </div>
+    </a>
     <div class="top-actions">
       <div class="privacy" title="El procesamiento ocurre en tu dispositivo">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>

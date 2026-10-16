@@ -7,7 +7,7 @@
 **Convierte, comprime, redimensiona y recorta imágenes por lotes, sin subirlas a ningún sitio.**
 Todo ocurre en tu navegador: tus fotos nunca salen de tu equipo.
 
-[![Abrir Pixelote](https://img.shields.io/badge/Abrir_la_app-pixelote.de-8b5cf6?style=for-the-badge&logo=googlechrome&logoColor=white)](https://pixelote.de)
+[![Abrir Pixelote](https://img.shields.io/badge/Abrir_la_app-pixelote.de-8b5cf6?style=for-the-badge&logo=googlechrome&logoColor=white)](https://pixelote.de/app/)
 [![Descargar para Windows](https://img.shields.io/badge/Descargar-Windows-0078D4?style=for-the-badge&logo=windows11&logoColor=white)](https://github.com/IamYisuSB/pixelote/releases/latest)
 
 [![Versión](https://img.shields.io/github/v/release/IamYisuSB/pixelote?label=versi%C3%B3n&color=a855f7)](https://github.com/IamYisuSB/pixelote/releases)
@@ -16,7 +16,7 @@ Todo ocurre en tu navegador: tus fotos nunca salen de tu equipo.
 ![PWA](https://img.shields.io/badge/PWA-funciona_sin_conexi%C3%B3n-5a0fc8?logo=pwa&logoColor=white)
 ![Idiomas](https://img.shields.io/badge/idiomas-ES_·_EN_·_PT_·_DE-6d5dfc)
 
-[Probarla](https://pixelote.de) · [App para Windows](https://pixelote.de/descargar/) · [Funciones](#-funciones) · [Hoja de ruta](ROADMAP.md) · [Informar de un problema](https://github.com/IamYisuSB/pixelote/issues)
+[Web](https://pixelote.de) · [Probarla](https://pixelote.de/app/) · [App para Windows](https://pixelote.de/descargar/) · [Funciones](#-funciones) · [Hoja de ruta](ROADMAP.md) · [Informar de un problema](https://github.com/IamYisuSB/pixelote/issues)
 
 <br>
 
@@ -70,18 +70,18 @@ Todo ocurre en tu navegador: tus fotos nunca salen de tu equipo.
 
 ## 💻 Cómo usarla
 
-**En el navegador:** entra en **[pixelote.de](https://pixelote.de)**. Desde el botón **Descargar → Instalar en este navegador** se queda como una app más y funciona sin internet.
+**En el navegador:** entra en **[pixelote.de](https://pixelote.de)** y pulsa *Abrir Pixelote* (la app está en [pixelote.de/app](https://pixelote.de/app/)). Desde el botón **Descargar → Instalar en este navegador** se queda como una app más y funciona sin internet.
 
 <img src="docs/capturas/menu-descargar.png" alt="Menú Descargar con las opciones de instalar la app web o la app para Windows" width="520">
 
 **En Windows:** descarga el instalador o la versión portable desde **[Releases](https://github.com/IamYisuSB/pixelote/releases/latest)** o desde la [página de descarga](https://pixelote.de/descargar/). Pesa unos 3,5 MB y no necesita instalar nada más.
 
-**En local:** clona el repositorio y abre `index.html` con doble clic. No necesita instalación, compilación ni servidor.
+**En local:** clona el repositorio y abre `app/index.html` con doble clic (o `index.html` para ver la página de inicio). No necesita instalación, compilación ni servidor.
 
 ```bash
 git clone https://github.com/IamYisuSB/pixelote.git
 cd pixelote
-# Abre index.html, o sírvela para poder instalarla como app:
+# Abre app/index.html, o sírvela para poder instalarla como app:
 python -m http.server 8000   # → http://localhost:8000
 ```
 
@@ -110,7 +110,7 @@ python -m http.server 8000   # → http://localhost:8000
 - **Política de seguridad de contenido (CSP):** la página solo puede ejecutar su propio código y el del CDN de los códecs, y solo puede enviar datos a Web3Forms.
 - **Librerías externas verificadas:** HEIC, TIFF y pako se comprueban con su huella SHA-384 (SRI) antes de usarse; si el CDN sirviera otra cosa, se rechaza.
 - **Decodificador HEIC aislado:** necesita una función (`new Function`) que la página prohíbe, así que se ejecuta en un iframe *sandbox* sin acceso a la página, al almacenamiento ni a internet. Por eso HEIC necesita conexión aunque la app esté instalada.
-- **Si cambias código protegido por la CSP:** si editas el pequeño script de `<head>` (que está igual en `index.html` y `descargar/index.html`) o el de `heic-sandbox.html`, recalcula su huella `sha256` en la CSP de esos archivos, o el navegador lo bloqueará.
+- **Si cambias código protegido por la CSP:** si editas el pequeño script de `<head>` (que está igual en `app/index.html` y `descargar/index.html`) o el de `heic-sandbox.html`, recalcula su huella `sha256` en la CSP de esos archivos, o el navegador lo bloqueará.
 
 </details>
 
@@ -147,7 +147,7 @@ La app de Windows está en [`desktop/`](desktop/README.md) (Tauri, ~3,5 MB).
 <details>
 <summary><b>Direcciones limpias</b></summary>
 
-Servida desde una web, la app está en `/` y la descarga en `/descargar/`, sin `index.html` a la vista; si alguien entra por `/index.html`, la barra de direcciones se limpia sola. Abierta con doble clic, los enlaces añaden `index.html` automáticamente, porque el navegador no abre las carpetas.
+Servida desde una web, la página de inicio está en `/`, la app en `/app/` y la descarga en `/descargar/`, sin `index.html` a la vista. Los enlaces antiguos de atajos compartidos (`/#atajo=…`) y la app ya instalada abren directamente `/app/`; si alguien entra por `/index.html`, la barra de direcciones se limpia sola. Abierta con doble clic, los enlaces añaden `index.html` automáticamente, porque el navegador no abre las carpetas.
 
 </details>
 
@@ -156,7 +156,10 @@ Servida desde una web, la app está en `/` y la descarga en `/descargar/`, sin `
 
 | Archivo | Contenido |
 |---|---|
-| `index.html` | Estructura de la página |
+| `index.html`, `home.css`, `home.js`, `i18n-home.js`, `theme-init.js` | Página de inicio (presentación y SEO) |
+| `img/` | Capturas de la página de inicio e imagen para compartir (`og.png`) |
+| `robots.txt`, `sitemap.xml` | Indicaciones para los buscadores |
+| `app/index.html` | Estructura de la app |
 | `app.js` | Interfaz: carga de imágenes, ajustes, editor, comparador y reparto del trabajo entre Workers |
 | `pipeline.js` | Procesado de una imagen (recorte, tamaño, codificación, EXIF); se ejecuta igual en un Worker o en la página |
 | `encoders.js` | Codificadores BMP, TIFF, ICO, GIF, PDF y PNG con paleta, ZIP, EXIF, y AVIF/MozJPEG por WebAssembly |

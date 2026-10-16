@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <!-- Seguridad: esta página solo carga código y estilos propios. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; manifest-src 'self'; worker-src 'self'; media-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pixelote · Conversor de imágenes por lotes gratis y sin subir nada</title>
+  <meta name="description" content="Convierte, comprime, redimensiona y recorta imágenes por lotes gratis, directamente en tu navegador y sin subirlas a ningún sitio. HEIC a JPG, PNG a WebP, AVIF, PDF y más.">
+  <link rel="canonical" href="https://pixelote.de/">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#5b5bd6">
+
+  <!-- Vista previa al compartir el enlace (redes sociales, WhatsApp, Slack…) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Pixelote">
+  <meta property="og:url" content="https://pixelote.de/">
+  <meta property="og:title" content="Pixelote · Conversor de imágenes por lotes, gratis y privado">
+  <meta property="og:description" content="Convierte, comprime, redimensiona y recorta decenas de imágenes a la vez, sin subirlas a ningún sitio.">
+  <meta property="og:image" content="https://pixelote.de/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Pixelote convirtiendo seis fotos a WebP con un 82 % de ahorro">
+  <meta property="og:locale" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="icons/logo.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preload" as="image" href="img/app-dark.webp" media="(prefers-color-scheme: dark)">
+  <script src="theme-init.js"></script>
+  <link rel="stylesheet" href="styles-moderno.css">
+  <link rel="stylesheet" href="home.css">
+
+  <!-- Datos estructurados para buscadores -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Pixelote",
+    "url": "https://pixelote.de/",
+    "image": "https://pixelote.de/img/og.png",
+    "description": "Conversor de imágenes por lotes que funciona en el navegador: convierte, comprime, redimensiona y recorta sin subir nada.",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Web, Windows 10, Windows 11",
+    "inLanguage": ["es", "en", "pt-BR", "de"],
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "featureList": "Convertir a WebP, JPG, PNG, AVIF, GIF, PDF, BMP, TIFF e ICO; abrir HEIC, TIFF y RAW; comprimir; redimensionar; recortar con formas; marca de agua; quitar datos GPS; funciona sin conexión"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "¿Pixelote es gratis?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Es totalmente gratis, sin anuncios, sin registro y sin marcas de agua." } },
+      { "@type": "Question", "name": "¿Se suben mis imágenes a algún servidor?", "acceptedAnswer": { "@type": "Answer", "text": "No. Todo el trabajo lo hace tu propio navegador: las imágenes nunca salen de tu equipo, así que nadie más puede verlas." } },
+      { "@type": "Question", "name": "¿Cómo convierto las fotos HEIC del iPhone a JPG?", "acceptedAnswer": { "@type": "Answer", "text": "Abre Pixelote, arrastra tus fotos HEIC, elige JPG como formato de salida y pulsa Convertir. Después puedes descargarlas una a una o todas juntas en un .zip." } },
+      { "@type": "Question", "name": "¿Funciona sin conexión a internet?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Si la instalas como app o usas la versión para Windows, funciona sin internet. La única excepción es HEIC, que necesita conexión para cargar su decodificador." } },
+      { "@type": "Question", "name": "¿Hay límite de imágenes o de tamaño?", "acceptedAnswer": { "@type": "Answer", "text": "No hay un límite fijo. Puedes convertir decenas o cientos de imágenes a la vez; el único límite es la memoria de tu equipo." } },
+      { "@type": "Question", "name": "¿Funciona en el móvil, en Mac o en Linux?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Funciona en cualquier navegador moderno: Chrome, Edge, Firefox y Safari, en el ordenador y en el móvil. En Windows también puedes instalarla como programa." } },
+      { "@type": "Question", "name": "¿Mis fotos pierden calidad?", "acceptedAnswer": { "@type": "Answer", "text": "Tú decides. Con PNG, TIFF o BMP no se pierde nada. Con WebP, JPG o AVIF eliges la calidad, y el comparador antes/después te deja ver la diferencia antes de descargar." } },
+      { "@type": "Question", "name": "¿Puedo quitar la ubicación GPS de mis fotos?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Por defecto, Pixelote elimina los datos EXIF, incluida la ubicación. Si los necesitas, puedes conservarlos en las opciones avanzadas." } }
+    ]
+  }
+  </script>
+</head>
+<body class="home">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="topbar home-bar">
+    <a class="brand brand-link" href="./" aria-label="Pixelote, inicio">
+      <span class="logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><defs> <linearGradient id="pxg-head" x1="0" y1="0" x2="1" y2="1"> <stop offset="0" stop-color="#6d5dfc"/> <stop offset=".55" stop-color="#a855f7"/> <stop offset="1" stop-color="#ec4899"/> </linearGradient> </defs> <rect width="48" height="48" rx="14" fill="url(#pxg-head)"/> <g fill="#fff"> <rect x="12.5" y="9.5" width="5" height="5" rx="1.3"/> <rect x="18.5" y="9.5" width="5" height="5" rx="1.3"/> <rect x="24.5" y="9.5" width="5" height="5" rx="1.3"/> <rect x="12.5" y="15.5" width="5" height="5" rx="1.3"/> <rect x="30.5" y="15.5" width="5" height="5" rx="1.3"/> <rect x="12.5" y="21.5" width="5" height="5" rx="1.3"/> <rect x="18.5" y="21.5" width="5" height="5" rx="1.3"/> <rect x="24.5" y="21.5" width="5" height="5" rx="1.3"/> <rect x="12.5" y="27.5" width="5" height="5" rx="1.3"/> <rect x="12.5" y="33.5" width="5" height="5" rx="1.3"/> <rect x="19.6" y="34.6" width="3.8" height="3.8" rx="1" opacity=".85"/> <rect x="25.2" y="35.7" width="2.7" height="2.7" rx=".7" opacity=".65"/> <rect x="29.7" y="36.7" width="1.7" height="1.7" rx=".45" opacity=".45"/> </g></svg>
+      </span>
+      <span class="home-name">Pixelote</span>
+    </a>
+    <nav class="home-nav" aria-label="Secciones">
+      <a href="#funciones">Funciones</a>
+      <a href="#formatos">Formatos</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#preguntas">Preguntas</a>
+    </nav>
+    <div class="top-actions">
+      <div class="lang-picker" id="langPicker">
+        <button type="button" class="lang-btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="langMenu" aria-label="Idioma">
+          <span class="flag" id="langFlag" aria-hidden="true"></span>
+          <span id="langCode"></span>
+          <svg class="caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <ul class="lang-menu" id="langMenu" role="listbox" aria-label="Idioma" hidden></ul>
+      </div>
+      <button class="icon-toggle" id="themeBtn" type="button"></button>
+      <a class="btn primary small home-open" href="app/">Abrir la app</a>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <!-- Portada -->
+    <section class="hero">
+      <div class="hero-text">
+        <p class="kicker"><span>Gratis</span><span>Sin registro</span><span>Sin subir nada</span></p>
+        <h1>Convierte y comprime imágenes por lotes, <span class="grad-text">sin que salgan de tu equipo</span></h1>
+        <p class="lead">Pixelote cambia el formato, comprime, redimensiona y recorta decenas de fotos a la vez, directamente en tu navegador. HEIC, WebP, AVIF, PNG, JPG, PDF y muchos más.</p>
+        <div class="hero-cta">
+          <a class="btn primary cta-big" href="app/">
+            <span>Abrir Pixelote</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="btn ghost cta-big" href="descargar/">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zM11.5 4.4L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.4z" fill="currentColor"/></svg>
+            <span>Descargar para Windows</span>
+          </a>
+        </div>
+        <ul class="ticks">
+          <li>Sin marcas de agua</li>
+          <li>Funciona sin conexión</li>
+          <li>Sin límite de imágenes</li>
+        </ul>
+      </div>
+      <figure class="hero-shot">
+        <div class="window">
+          <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>pixelote.de/app</span></div>
+          <img class="shot-dark" src="img/app-dark.webp" width="1440" height="900" alt="Pixelote con seis fotos convertidas a WebP: de 550 KB a 101 KB, un 82 % menos" fetchpriority="high">
+          <img class="shot-light" src="img/app-light.webp" width="1440" height="900" alt="Pixelote con seis fotos convertidas a WebP: de 550 KB a 101 KB, un 82 % menos" loading="lazy">
+        </div>
+      </figure>
+    </section>
+
+    <!-- Cifras -->
+    <section class="stats" aria-label="Pixelote en cifras">
+      <div><b>11</b><span>formatos de entrada</span></div>
+      <div><b>9</b><span>formatos de salida</span></div>
+      <div><b>0</b><span>imágenes subidas a internet</span></div>
+      <div><b>4</b><span>idiomas</span></div>
+    </section>
+
+    <!-- Privacidad -->
+    <section class="privacy-band" id="privacidad">
+      <div class="privacy-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <h2>Tus fotos no salen de tu equipo</h2>
+        <p>La mayoría de conversores online suben tus imágenes a un servidor. Pixelote no: todo el trabajo lo hace tu propio navegador, así que nadie más puede verlas. Ni siquiera nosotros.</p>
+        <ul class="ticks">
+          <li>Sin servidores que reciban tus archivos</li>
+          <li>Sin cuentas ni registros</li>
+          <li>Quita la ubicación GPS de tus fotos</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Funciones -->
+    <section class="section" id="funciones">
+      <div class="section-head">
+        <h2>Todo lo que necesitas para tus imágenes</h2>
+        <p>Una sola herramienta para convertir, comprimir y preparar tus fotos para la web, las redes o el correo.</p>
+      </div>
+      <div class="features">
+        <article class="feature">
+          <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h13l-3-3M20 17H7l3 3" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <h3>Convertir formatos</h3>
+          <p>De HEIC a JPG, de PNG a WebP, de cualquier imagen a PDF… o deja que el modo Auto elija el mejor formato para cada foto.</p>
+        </article>
+        <article class="feature">
+          <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <h3>Comprimir sin perder calidad</h3>
+          <p>Ajusta la calidad o fija un peso máximo en KB. Con MozJPEG y PNG optimizado, tus fotos pesan mucho menos.</p>
+        </article>
+        <article class="feature">
+          <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M14 3h7v7M21 3l-8 8" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <h3>Redimensionar</h3>
+          <p>Por porcentaje, a un ancho máximo o a medidas exactas. Genera varios tamaños de una vez para tu web.</p>
+        </article>
+        <article class="feature">
+          <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.3-7-9.5A3.8 3.8 0 0112 8a3.8 3.8 0 017 2.5C19 15.7 12 20 12 20z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M3 3h4M3 3v4M21 3h-4M21 3v4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span>
+          <h3>Recortar con formas</h3>
+          <p>Proporciones como 1:1 o 16:9 y formas redondas, de corazón o de estrella, con ajuste fino desde el teclado.</p>
+        </article>
+        <article class="feature">
+          <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.9"/><rect x="13" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.9"/><rect x="3" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.9"/><rect x="13" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.9"/></svg></span>
+          <h3>Por lotes y en paralelo</h3>
+          <p>Arrastra decenas de fotos o carpetas enteras. Se procesan a la vez y las descargas todas juntas en un .zip.</p>
+        </article>
+        <article class="feature">
+          <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 4v16M8 10l-2 2 2 2M16 10l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <h3>Antes y después</h3>
+          <p>Compara el original con el resultado con un deslizador, antes de descargar nada.</p>
+        </article>
+        <article class="feature">
+          <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17l3.5-10h3L17 17M8.5 13h7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.9"/></svg></span>
+          <h3>Marca de agua</h3>
+          <p>Añade tu texto o tu logo, en la posición, el tamaño y la opacidad que quieras. Solo si tú quieres.</p>
+        </article>
+        <article class="feature">
+          <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 3L5 13h6l-1 8 8-10h-6z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></span>
+          <h3>Atajos listos</h3>
+          <p>Web, Instagram, email, miniaturas, favicon… o guarda tus propios ajustes y compártelos con un enlace.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Destacados -->
+    <section class="section showcase">
+      <div class="show-row">
+        <div class="show-text">
+          <h2>Mira lo que ahorras antes de descargar</h2>
+          <p>Cada imagen muestra su peso antes y después, y el comparador te deja deslizar entre el original y el resultado para comprobar que la calidad sigue intacta.</p>
+          <ul class="ticks">
+            <li>Calidad ajustable o peso máximo en KB</li>
+            <li>Vista al 100 % para ver cada detalle</li>
+          </ul>
+        </div>
+        <figure class="show-img"><img src="img/comparador.webp" width="1440" height="900" alt="Comparador antes y después: la foto original de 48 KB junto a la versión WebP de 14 KB" loading="lazy"></figure>
+      </div>
+      <div class="show-row reverse">
+        <div class="show-text">
+          <h2>Recorta justo lo que quieres</h2>
+          <p>Elige la zona exacta, gira, voltea y dale forma: redonda, de corazón, de estrella o con esquinas redondeadas. Lo que queda fuera sale transparente.</p>
+          <ul class="ticks">
+            <li>Proporciones para Instagram, vídeo o pantalla</li>
+            <li>Mueve el recorte con las flechas del teclado</li>
+          </ul>
+        </div>
+        <figure class="show-img"><img src="img/formas.webp" width="1440" height="900" alt="Editor de recorte con la forma de corazón sobre una foto de un atardecer" loading="lazy"></figure>
+      </div>
+    </section>
+
+    <!-- Cómo funciona -->
+    <section class="section" id="como-funciona">
+      <div class="section-head">
+        <h2>Así de fácil</h2>
+        <p>Sin instalar nada y sin crear ninguna cuenta.</p>
+      </div>
+      <ol class="steps">
+        <li>
+          <span class="step-n" aria-hidden="true">1</span>
+          <h3>Arrastra tus imágenes</h3>
+          <p>Suelta fotos o carpetas enteras, elígelas desde tu equipo o pégalas con Ctrl+V.</p>
+        </li>
+        <li>
+          <span class="step-n" aria-hidden="true">2</span>
+          <h3>Elige el formato</h3>
+          <p>Pulsa un atajo o ajusta la calidad, el tamaño y el recorte a tu gusto.</p>
+        </li>
+        <li>
+          <span class="step-n" aria-hidden="true">3</span>
+          <h3>Descárgalas</h3>
+          <p>Pulsa Convertir y descarga cada imagen o todas juntas en un .zip.</p>
+        </li>
+      </ol>
+      <p class="center"><a class="btn primary cta-big" href="app/"><span>Probar ahora</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+    </section>
+
+    <!-- Formatos -->
+    <section class="section" id="formatos">
+      <div class="section-head">
+        <h2>Formatos compatibles</h2>
+        <p>Abre las fotos de tu móvil o de tu cámara y guárdalas en el formato que necesites.</p>
+      </div>
+      <div class="formats-grid">
+        <div class="format-box">
+          <h3>Abre</h3>
+          <ul class="fchips">
+            <li>JPG</li><li>PNG</li><li>WebP</li><li>AVIF</li><li>GIF</li><li>BMP</li><li>SVG</li><li>ICO</li>
+            <li class="hl">HEIC / HEIF</li><li class="hl">TIFF</li><li class="hl">RAW</li>
+          </ul>
+          <p class="muted small">HEIC son las fotos del iPhone. RAW incluye DNG, CR2, CR3, NEF, ARW, ORF, RW2, RAF y más.</p>
+        </div>
+        <div class="format-box">
+          <h3>Guarda en</h3>
+          <ul class="fchips">
+            <li class="hl">WebP</li><li>JPG</li><li>PNG</li><li class="hl">AVIF</li><li>GIF</li><li>PDF</li><li>BMP</li><li>TIFF</li><li>ICO</li>
+          </ul>
+          <p class="muted small">O en modo Auto, que elige el formato según sea una foto, un gráfico o tenga transparencia.</p>
+        </div>
+      </div>
+      <h3 class="popular-title">Conversiones más usadas</h3>
+      <ul class="popular">
+        <li><a href="app/">HEIC a JPG</a></li>
+        <li><a href="app/">PNG a WebP</a></li>
+        <li><a href="app/">JPG a WebP</a></li>
+        <li><a href="app/">WebP a PNG</a></li>
+        <li><a href="app/">Imágenes a PDF</a></li>
+        <li><a href="app/">JPG a AVIF</a></li>
+        <li><a href="app/">Crear un favicon ICO</a></li>
+        <li><a href="app/">Comprimir fotos para email</a></li>
+      </ul>
+    </section>
+
+    <!-- Dónde usarla -->
+    <section class="section" id="instalar">
+      <div class="section-head">
+        <h2>Úsala donde quieras</h2>
+        <p>En el ordenador o en el móvil, con internet o sin él.</p>
+      </div>
+      <div class="install">
+        <article class="install-card">
+          <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" fill="none" stroke="currentColor" stroke-width="1.9"/></svg></span>
+          <h3>En el navegador</h3>
+          <p>Ábrela y empieza. Funciona en Chrome, Edge, Firefox y Safari, también en el móvil.</p>
+          <a class="btn ghost small" href="app/">Abrir la app</a>
+        </article>
+        <article class="install-card">
+          <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 7v7m0 0l-3-3m3 3l3-3" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <h3>Instalada como app</h3>
+          <p>Desde el botón Descargar de la app, instálala con su propio icono y úsala sin conexión.</p>
+          <a class="btn ghost small" href="app/">Instalar desde la app</a>
+        </article>
+        <article class="install-card">
+          <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 5.5l7.5-1v7H3zM11.5 4.4L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.4z" fill="currentColor"/></svg></span>
+          <h3>Programa para Windows</h3>
+          <p>Un programa ligero, de unos 3,5 MB, para Windows 10 y 11. Avisa solo cuando hay una versión nueva.</p>
+          <a class="btn ghost small" href="descargar/">Descargar para Windows</a>
+        </article>
+        <figure class="install-phone"><img src="img/movil.webp" width="780" height="1688" alt="Pixelote en un móvil con seis fotos convertidas" loading="lazy"></figure>
+      </div>
+    </section>
+
+    <!-- Preguntas frecuentes -->
+    <section class="section" id="preguntas">
+      <div class="section-head">
+        <h2>Preguntas frecuentes</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>¿Pixelote es gratis?</summary>
+          <p>Sí. Es totalmente gratis, sin anuncios, sin registro y sin marcas de agua.</p>
+        </details>
+        <details>
+          <summary>¿Se suben mis imágenes a algún servidor?</summary>
+          <p>No. Todo el trabajo lo hace tu propio navegador: las imágenes nunca salen de tu equipo, así que nadie más puede verlas.</p>
+        </details>
+        <details>
+          <summary>¿Cómo convierto las fotos HEIC del iPhone a JPG?</summary>
+          <p>Abre Pixelote, arrastra tus fotos HEIC, elige JPG como formato de salida y pulsa Convertir. Después puedes descargarlas una a una o todas juntas en un .zip.</p>
+        </details>
+        <details>
+          <summary>¿Funciona sin conexión a internet?</summary>
+          <p>Sí. Si la instalas como app o usas la versión para Windows, funciona sin internet. La única excepción es HEIC, que necesita conexión para cargar su decodificador.</p>
+        </details>
+        <details>
+          <summary>¿Hay límite de imágenes o de tamaño?</summary>
+          <p>No hay un límite fijo. Puedes convertir decenas o cientos de imágenes a la vez; el único límite es la memoria de tu equipo.</p>
+        </details>
+        <details>
+          <summary>¿Funciona en el móvil, en Mac o en Linux?</summary>
+          <p>Sí. Funciona en cualquier navegador moderno: Chrome, Edge, Firefox y Safari, en el ordenador y en el móvil. En Windows también puedes instalarla como programa.</p>
+        </details>
+        <details>
+          <summary>¿Mis fotos pierden calidad?</summary>
+          <p>Tú decides. Con PNG, TIFF o BMP no se pierde nada. Con WebP, JPG o AVIF eliges la calidad, y el comparador antes/después te deja ver la diferencia antes de descargar.</p>
+        </details>
+        <details>
+          <summary>¿Puedo quitar la ubicación GPS de mis fotos?</summary>
+          <p>Sí. Por defecto, Pixelote elimina los datos EXIF, incluida la ubicación. Si los necesitas, puedes conservarlos en las opciones avanzadas.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Llamada final -->
+    <section class="final-cta">
+      <h2>¿Listo para convertir tus imágenes?</h2>
+      <p>Es gratis, es rápido y tus fotos se quedan contigo.</p>
+      <a class="btn primary cta-big" href="app/"><span>Abrir Pixelote</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </section>
+  </main>
+
+  <footer class="home-footer">
+    <div class="hf-brand">
+      <span class="footer-logo">
+        <svg viewBox="0 0 48 48" width="22" height="22" aria-hidden="true"><defs><linearGradient id="pxg-foot" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6d5dfc"/><stop offset=".55" stop-color="#a855f7"/><stop offset="1" stop-color="#ec4899"/></linearGradient></defs><rect width="48" height="48" rx="14" fill="url(#pxg-foot)"/><g fill="#fff"><rect x="12.5" y="9.5" width="5" height="5" rx="1.3"/><rect x="18.5" y="9.5" width="5" height="5" rx="1.3"/><rect x="24.5" y="9.5" width="5" height="5" rx="1.3"/><rect x="12.5" y="15.5" width="5" height="5" rx="1.3"/><rect x="30.5" y="15.5" width="5" height="5" rx="1.3"/><rect x="12.5" y="21.5" width="5" height="5" rx="1.3"/><rect x="18.5" y="21.5" width="5" height="5" rx="1.3"/><rect x="24.5" y="21.5" width="5" height="5" rx="1.3"/><rect x="12.5" y="27.5" width="5" height="5" rx="1.3"/><rect x="12.5" y="33.5" width="5" height="5" rx="1.3"/></g></svg>
+        <b>Pixelote</b>
+      </span>
+      <p class="muted">Convierte tus imágenes sin subirlas a ningún sitio: todo ocurre en tu navegador, así que tus fotos siguen siendo solo tuyas.</p>
+    </div>
+    <nav class="hf-links" aria-label="Enlaces">
+      <a href="app/">Abrir la app</a>
+      <a href="descargar/">Descargar para Windows</a>
+      <a href="https://github.com/IamYisuSB/pixelote" rel="noopener">Código en GitHub</a>
+      <a href="https://github.com/IamYisuSB/pixelote/issues" rel="noopener">Informar de un problema</a>
+    </nav>
+    <p class="hf-small muted">© <span id="year"></span> Pixelote</p>
+  </footer>
+
+  <script src="i18n.js"></script>
+  <script src="i18n-home.js"></script>
+  <script src="ui-common.js"></script>
+  <script src="home.js"></script>
+</body>
+</html>

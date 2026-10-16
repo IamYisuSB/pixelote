@@ -466,6 +466,10 @@
       listeners.forEach((fn) => fn(l));
     },
     onChange(fn) { listeners.push(fn); },
+    /* Añade traducciones de otra página (filas [es, en, pt, de]). Antes de init(). */
+    add(rows) {
+      for (const [es, en, pt, de] of rows) { DICT.en[es] = en; DICT.pt[es] = pt; DICT.de[es] = de; }
+    },
     /* Claves que se han capturado del HTML (para comprobar que todo está traducido). */
     staticKeys() {
       const keys = new Set();

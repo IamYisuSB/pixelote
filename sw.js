@@ -4,11 +4,17 @@
  *   actualizándose en segundo plano (stale-while-revalidate).
  * - Códecs del CDN (HEIC, TIFF, AVIF, MozJPEG): sus URL llevan versión fija,
  *   así que se guardan la primera vez que se usan y luego salen de la caché. */
-const VERSION = 'pixelote-v12';
+const VERSION = 'pixelote-v13';
 const CDN_CACHE = 'pixelote-cdn';
 const SHELL = [
   './',
   './index.html',
+  './app/',
+  './app/index.html',
+  './theme-init.js',
+  './home.css',
+  './home.js',
+  './i18n-home.js',
   './heic-sandbox.html',
   './config.js',
   './styles.css',
@@ -68,8 +74,8 @@ self.addEventListener('fetch', (e) => {
     if (hit) { e.waitUntil(network); return hit; }
     const res = await network;
     if (res) return res;
-    // Sin conexión y sin copia: para la navegación, la página principal
-    if (req.mode === 'navigate') return cache.match('./index.html');
+    // Sin conexión y sin copia: para la navegación, la app
+    if (req.mode === 'navigate') return cache.match('./app/index.html');
     return Response.error();
   }));
 });
