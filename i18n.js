@@ -35,7 +35,7 @@
     for (let n = walker.nextNode(); n; n = walker.nextNode()) {
       const s = n.nodeValue.trim();
       const parent = n.parentElement;
-      if (!s || SKIP.test(s) || !parent || parent.closest('script, style, code')) continue;
+      if (!s || SKIP.test(s) || !parent || parent.closest('script, style, code, [data-no-i18n]')) continue;
       textOrig.set(n, n.nodeValue);
     }
     root.querySelectorAll('*').forEach((el) => {
@@ -431,6 +431,9 @@
     ['Funciones', 'Features', 'Recursos', 'Funktionen'],
     ['Todas', 'All', 'Todos', 'Alle'],
     ['Privacidad', 'Privacy', 'Privacidade', 'Datenschutz'],
+    ['Aviso legal', 'Legal notice', 'Aviso legal', 'Impressum'],
+    ['Política de privacidad · Pixelote', 'Privacy policy · Pixelote', 'Política de privacidade · Pixelote', 'Datenschutzerklärung · Pixelote'],
+    ['Aviso legal · Pixelote', 'Legal notice · Pixelote', 'Aviso legal · Pixelote', 'Impressum · Pixelote'],
     ['Todo en tu equipo', 'Everything on your computer', 'Tudo no seu computador', 'Alles auf deinem Computer'],
     // Botón «Descargar» de la cabecera
     ['Instalar en este navegador', 'Install in this browser', 'Instalar neste navegador', 'In diesem Browser installieren'],

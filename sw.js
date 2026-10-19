@@ -15,6 +15,7 @@ const SHELL = [
   './home.css',
   './home.js',
   './i18n-home.js',
+  './legal.js',
   './heic-sandbox.html',
   './config.js',
   './styles.css',

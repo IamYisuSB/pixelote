@@ -12,7 +12,7 @@ const dist = resolve(here, '../dist');
 // Solo lo que necesita la app; nada de server/, desktop/, documentación…
 // Ni la página de inicio ni la de descarga tienen sentido dentro de la app de
 // escritorio: la ventana abre directamente la app (app/index.html).
-const SKIP = /^(index\.html|home\.|i18n-home\.js|theme-init\.js|descargar\.)/;
+const SKIP = /^(index\.html|home\.|i18n-home\.js|theme-init\.js|legal\.js|descargar\.)/;
 const files = readdirSync(web).filter((f) => /\.(html|js|css|webmanifest)$/.test(f) && !SKIP.test(f));
 const folders = ['icons'];
 

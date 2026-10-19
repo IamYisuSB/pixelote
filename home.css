@@ -233,3 +233,20 @@ html { scroll-behavior: smooth; scroll-padding-top: 84px; }
   .final-cta { padding: 40px 20px; }
   .home-footer { padding: 28px 16px 36px; }
 }
+
+/* ---------- Páginas legales ---------- */
+.legal { max-width: 780px !important; padding-top: 48px !important; }
+.legal h1 { font-size: clamp(30px, 4vw, 42px); font-weight: 850; margin: 0; }
+.legal-date { margin: 8px 0 28px; color: var(--muted); font-size: 14px; }
+.legal h2 { font-size: 20px; font-weight: 750; margin: 34px 0 8px; }
+.legal p, .legal li { line-height: 1.7; font-size: 15.5px; }
+.legal p { margin: 0 0 12px; }
+.legal ul { margin: 0 0 12px; padding-left: 22px; }
+.legal li + li { margin-top: 6px; }
+.legal-summary {
+  padding: 20px 24px; border-radius: var(--radius); background: var(--good-soft);
+  border: 1px solid color-mix(in srgb, var(--good) 22%, transparent);
+}
+.legal-summary h2 { margin-top: 0; }
+.legal-summary ul { margin-bottom: 0; }
+.legal-data { list-style: none; padding: 16px 20px !important; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); }

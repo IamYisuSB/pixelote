@@ -722,3 +722,4 @@ a.btn, a.btn:visited { color: var(--text); }
 
 /* Logo de la cabecera como enlace a la página de inicio */
 .brand-link { color: inherit; text-decoration: none; }
+.footer-legal a { color: inherit; }

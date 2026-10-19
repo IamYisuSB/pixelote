@@ -159,6 +159,7 @@ Servida desde una web, la página de inicio está en `/`, la app en `/app/` y la
 | `index.html`, `home.css`, `home.js`, `i18n-home.js`, `theme-init.js` | Página de inicio (presentación y SEO) |
 | `img/` | Capturas de la página de inicio e imagen para compartir (`og.png`) |
 | `robots.txt`, `sitemap.xml` | Indicaciones para los buscadores |
+| `privacidad/`, `aviso-legal/`, `legal.js` | Política de privacidad y aviso legal (en los 4 idiomas) |
 | `app/index.html` | Estructura de la app |
 | `app.js` | Interfaz: carga de imágenes, ajustes, editor, comparador y reparto del trabajo entre Workers |
 | `pipeline.js` | Procesado de una imagen (recorte, tamaño, codificación, EXIF); se ejecuta igual en un Worker o en la página |
