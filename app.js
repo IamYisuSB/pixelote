@@ -2367,6 +2367,41 @@
     $('#installDialog').showModal();
   }
 
+  /* ---------- Cartel «Instalar» en el móvil ---------- */
+
+  const INSTALL_SEEN_KEY = 'pixelote.install.dismissed';
+  const INSTALL_AGAIN_DAYS = 30; // tras «Ahora no», no vuelve a salir en un mes
+
+  function isIos() {
+    const ua = navigator.userAgent;
+    return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  }
+
+  /* Se llama al poder instalarse (Android) o al abrir la página (iPhone/iPad, que
+   * no avisan). Solo en pantallas táctiles y si no lo cerró hace poco. */
+  let installBannerQueued = false;
+  function maybeShowInstallBanner() {
+    const el = $('#installPrompt');
+    if (!el || installBannerQueued || pwaInstalled || runningAsPwa() || !matchMedia('(pointer: coarse)').matches) return;
+    let seen = 0;
+    try { seen = Number(localStorage.getItem(INSTALL_SEEN_KEY)) || 0; } catch (_) { /* nada */ }
+    if (Date.now() - seen < INSTALL_AGAIN_DAYS * 864e5) return;
+    const hide = () => { el.hidden = true; };
+    const dismiss = () => {
+      hide();
+      try { localStorage.setItem(INSTALL_SEEN_KEY, String(Date.now())); } catch (_) { /* nada */ }
+    };
+    installBannerQueued = true;
+    $('#ipGo').textContent = installPrompt ? t('Instalar') : t('Cómo instalar');
+    $('#ipGo').onclick = () => { hide(); installPwa(); };
+    $('#ipLater').onclick = dismiss;
+    $('#ipClose').onclick = dismiss;
+    // Un poco después de abrir, y sin tapar otro aviso
+    setTimeout(() => {
+      if ($('#updatePrompt').hidden && $('#errorPrompt').hidden && !runningAsPwa()) el.hidden = false;
+    }, 3000);
+  }
+
   function setupGetMenu() {
     const btn = $('#getBtn');
     const menu = $('#getMenu');
@@ -2418,10 +2453,13 @@
       e.preventDefault();
       installPrompt = e;
       paintPwaItem();
+      maybeShowInstallBanner();
     });
+    if (isIos()) maybeShowInstallBanner();
     window.addEventListener('appinstalled', () => {
       installPrompt = null;
       pwaInstalled = true;
+      $('#installPrompt').hidden = true;
       paintPwaItem();
       toast(t('¡Pixelote instalado!'));
     });

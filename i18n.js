@@ -447,6 +447,11 @@
     ['Firefox no permite instalar apps web. Puedes usar Chrome o Edge, o descargar la app para Windows.', "Firefox doesn't support installing web apps. You can use Chrome or Edge, or download the Windows app.", 'O Firefox não permite instalar apps web. Você pode usar o Chrome ou o Edge, ou baixar o app para Windows.', 'Firefox kann keine Web-Apps installieren. Du kannst Chrome oder Edge verwenden oder die Windows-App herunterladen.'],
     ['En Safari, abre el menú Archivo y elige «Añadir al Dock».', 'In Safari, open the File menu and choose “Add to Dock”.', 'No Safari, abra o menu Arquivo e escolha “Adicionar ao Dock”.', 'Öffne in Safari das Menü „Ablage“ und wähle „Zum Dock hinzufügen“.'],
     ['Busca el icono de instalar en la barra de direcciones, o abre el menú del navegador (⋮) y elige «Instalar Pixelote».', 'Look for the install icon in the address bar, or open the browser menu (⋮) and choose “Install Pixelote”.', 'Procure o ícone de instalar na barra de endereços, ou abra o menu do navegador (⋮) e escolha “Instalar o Pixelote”.', 'Suche das Installationssymbol in der Adressleiste oder öffne das Browser-Menü (⋮) und wähle „Pixelote installieren“.'],
+    // Cartel de instalar en el móvil
+    ['Instala Pixelote en tu móvil', 'Install Pixelote on your phone', 'Instale o Pixelote no seu celular', 'Installiere Pixelote auf deinem Handy'],
+    ['Se abre como una app más, a pantalla completa y sin conexión.', 'It opens like any other app, full screen and offline.', 'Abre como qualquer outro app, em tela cheia e sem conexão.', 'Sie öffnet sich wie jede andere App, im Vollbild und offline.'],
+    ['Instalar', 'Install', 'Instalar', 'Installieren'],
+    ['Cómo instalar', 'How to install', 'Como instalar', 'So installierst du sie'],
     ['Ese email no parece válido', "That email doesn't look valid", 'Esse e-mail não parece válido', 'Diese E-Mail-Adresse scheint ungültig zu sein'],
   ];
   for (const [es, en, pt, de] of ROWS) { DICT.en[es] = en; DICT.pt[es] = pt; DICT.de[es] = de; }

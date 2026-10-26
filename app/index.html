@@ -546,6 +546,20 @@
     </div>
   </div>
 
+  <!-- Cartel para instalar la app web en el móvil -->
+  <div class="error-prompt install-prompt" id="installPrompt" role="status" aria-labelledby="ipTitle" hidden>
+    <div class="ep-head">
+      <span class="ep-icon" aria-hidden="true">📲</span>
+      <b id="ipTitle">Instala Pixelote en tu móvil</b>
+      <button type="button" class="ep-close" id="ipClose" aria-label="Cerrar aviso">✕</button>
+    </div>
+    <p class="ep-small">Se abre como una app más, a pantalla completa y sin conexión.</p>
+    <div class="ep-actions">
+      <button type="button" class="btn ghost small" id="ipLater">Ahora no</button>
+      <button type="button" class="btn primary small" id="ipGo">Instalar</button>
+    </div>
+  </div>
+
   <div class="error-prompt" id="errorPrompt" role="alertdialog" aria-labelledby="epTitle" hidden>
     <div class="ep-head">
       <span class="ep-icon" aria-hidden="true">⚠️</span>
